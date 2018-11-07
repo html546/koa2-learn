@@ -1,6 +1,9 @@
 const Koa = require('koa');
 const app = new Koa();
 
+const bodyParser = require('koa-bodyparser');
+
+app.use(bodyParser());
 app.use(async (ctx) => {
     if (ctx.url === '/' && ctx.method === 'GET') {
         let html = `
@@ -18,14 +21,15 @@ app.use(async (ctx) => {
         ctx.body = html;
     } else if (ctx.url === '/' && ctx.method === "POST") {
         // ctx.body = '接收到请求';
-        let postData = await parsePostData(ctx);
+        // let postData = await parsePostData(ctx);
+        let postData = ctx.request.body;
         ctx.body = postData;
     } else {
         ctx.body = '<h1>404!</h1>';
     }
 })
 
-function parsePostData(ctx) {
+/* function parsePostData(ctx) {
     return new Promise((resolve, reject) => {
         try {
             let postdata = '';
@@ -53,7 +57,7 @@ function parseQueryStr(queryStr) {
     }
     return queryData;
 }
-
+ */
 app.listen(3000, () => {
     console.log(`[demo] server is starting at port 3000`);
 })
